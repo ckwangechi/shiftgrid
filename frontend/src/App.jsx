@@ -4,6 +4,8 @@ import DashboardPage from "./features/dashboard/pages/DashboardPage";
 import ShiftsPage from "./features/shifts/pages/ShiftsPage";
 import BrowseShiftsPage from "./features/browse-shifts/pages/BrowseShiftsPage";
 import LocationsPage from "./features/locations/pages/LocationsPage";
+import ProfilePage from "./features/profile/pages/ProfilePage";
+import PreferencesPage from "./features/profile/pages/PreferencesPage";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Route path="/shifts" element={<ShiftsPage />} />
         <Route path="/browse-shifts" element={<BrowseShiftsPage />} />
         <Route path="/locations" element={<LocationsPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/preferences" element={<PreferencesPage />} />
         <Route
           path="*"
           element={

@@ -166,7 +166,12 @@ const Sidebar = () => {
       {/* User Card */}
 
       <div className="border-t border-slate-800 p-5">
-        <UserProfile />
+        <NavLink
+          to="/profile"
+          className="block hover:bg-slate-900 rounded-2xl transition"
+        >
+          <UserProfile />
+        </NavLink>
 
         <button
           className={`mt-6 bg-red-600 hover:bg-red-700 rounded-2xl transition h-12 flex items-center ${
