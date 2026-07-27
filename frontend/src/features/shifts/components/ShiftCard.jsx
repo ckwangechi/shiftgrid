@@ -64,18 +64,6 @@ const ShiftCard = ({ shift, onView, onClaim }) => {
           <div>
 
             <p className="text-sm text-slate-400">
-              Match
-            </p>
-
-            <h3 className="text-2xl font-bold text-blue-600">
-              {shift.match}%
-            </h3>
-
-          </div>
-
-          <div>
-
-            <p className="text-sm text-slate-400">
               Slots
             </p>
 
@@ -91,13 +79,25 @@ const ShiftCard = ({ shift, onView, onClaim }) => {
 
           </div>
 
+          <div>
+
+            <p className="text-sm text-slate-400">
+              Pay
+            </p>
+
+            <div className="flex items-center gap-2 font-semibold text-emerald-600">
+              <span>{shift.pay ? `KES ${shift.pay}` : "—"}</span>
+            </div>
+
+          </div>
+
         </div>
 
         <div className="mt-8 flex gap-3">
 
           <button
-  onClick={onView}
-  className="
+            onClick={onView}
+            className="
     flex-1
     py-3
     rounded-xl
@@ -121,10 +121,39 @@ const ShiftCard = ({ shift, onView, onClaim }) => {
     hover:shadow-emerald-500/30
     active:scale-95
   "
->
-  View Details
-</button>
+          >
+            View Details
+          </button>
 
+          <button
+            onClick={() => onClaim(shift.id)}
+            className="
+    flex-1
+    py-3
+    rounded-xl
+    border
+    border-blue-500/30
+    bg-blue-50
+    dark:bg-blue-900/20
+    text-blue-700
+    dark:text-blue-400
+    font-semibold
+    flex
+    items-center
+    justify-center
+    gap-2
+    transition-all
+    duration-300
+    hover:bg-blue-600
+    hover:text-white
+    hover:border-blue-600
+    hover:shadow-lg
+    hover:shadow-blue-500/30
+    active:scale-95
+  "
+          >
+            Claim
+          </button>
 
         </div>
 

@@ -27,8 +27,6 @@ const ShiftFilters = ({ filters, setFilters }) => {
   return (
     <aside className="sticky top-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
 
-      {/* Header */}
-
       <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 p-6">
 
         <div>
@@ -52,8 +50,6 @@ const ShiftFilters = ({ filters, setFilters }) => {
 
       <div className="space-y-6 p-6">
 
-        {/* Location */}
-
         <div>
 
           <label className="mb-2 flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -67,17 +63,9 @@ const ShiftFilters = ({ filters, setFilters }) => {
             className="w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-slate-900 dark:text-white"
           >
             <option value="">All Locations</option>
-            <option value="Nairobi Convention Centre">
-              Nairobi Convention Centre
-            </option>
-            <option value="KICC">KICC</option>
-            <option value="Westlands">Westlands</option>
-            <option value="Kasarani Stadium">Kasarani Stadium</option>
           </select>
 
         </div>
-
-        {/* Skill */}
 
         <div>
 
@@ -92,15 +80,9 @@ const ShiftFilters = ({ filters, setFilters }) => {
             className="w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-slate-900 dark:text-white"
           >
             <option value="">All Skills</option>
-            <option value="Security">Security</option>
-            <option value="Customer Service">Customer Service</option>
-            <option value="First Aid">First Aid</option>
-            <option value="Logistics">Logistics</option>
           </select>
 
         </div>
-
-        {/* Status */}
 
         <div>
 
@@ -120,8 +102,6 @@ const ShiftFilters = ({ filters, setFilters }) => {
           </select>
 
         </div>
-
-        {/* Time */}
 
         <div>
 
@@ -144,8 +124,6 @@ const ShiftFilters = ({ filters, setFilters }) => {
 
         </div>
 
-        {/* Date */}
-
         <div>
 
           <label className="mb-2 flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -167,5 +145,4 @@ const ShiftFilters = ({ filters, setFilters }) => {
     </aside>
   );
 };
-
 export default ShiftFilters;

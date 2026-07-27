@@ -43,7 +43,11 @@ const ShiftCommandBar = ({
           />
 
           <span className="font-medium text-slate-700 dark:text-slate-300">
-            Today
+            {new Date().toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })}
           </span>
 
         </div>

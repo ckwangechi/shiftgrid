@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import DashboardPage from "./features/dashboard/pages/DashboardPage";
 import ShiftsPage from "./features/shifts/pages/ShiftsPage";
 import BrowseShiftsPage from "./features/browse-shifts/pages/BrowseShiftsPage";
+import LocationsPage from "./features/locations/pages/LocationsPage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/shifts" element={<ShiftsPage />} />
         <Route path="/browse-shifts" element={<BrowseShiftsPage />} />
+        <Route path="/locations" element={<LocationsPage />} />
         <Route
           path="*"
           element={
