@@ -6,6 +6,7 @@ import BrowseShiftsPage from "./features/browse-shifts/pages/BrowseShiftsPage";
 import LocationsPage from "./features/locations/pages/LocationsPage";
 import ProfilePage from "./features/profile/pages/ProfilePage";
 import PreferencesPage from "./features/profile/pages/PreferencesPage";
+import AdminPage from "./features/admin/pages/AdminPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/locations" element={<LocationsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/preferences" element={<PreferencesPage />} />
+        <Route path="/admin" element={<AdminPage />} />
         <Route
           path="*"
           element={

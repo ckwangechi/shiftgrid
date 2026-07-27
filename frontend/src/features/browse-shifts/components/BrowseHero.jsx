@@ -1,6 +1,8 @@
 import { Search, BriefcaseBusiness } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const BrowseHero = () => {
+  const navigate = useNavigate();
   return (
     <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900 p-10 text-white shadow-xl">
 
@@ -34,7 +36,10 @@ const BrowseHero = () => {
               Find Shifts
             </button>
 
-            <button className="flex items-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-6 py-3 backdrop-blur transition hover:bg-white/20">
+            <button
+              onClick={() => navigate("/shifts")}
+              className="flex items-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-6 py-3 backdrop-blur transition hover:bg-white/20"
+            >
               <BriefcaseBusiness size={18} />
               My Applications
             </button>

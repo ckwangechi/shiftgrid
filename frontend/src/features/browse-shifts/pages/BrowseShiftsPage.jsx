@@ -74,6 +74,7 @@ const BrowseShiftsPage = () => {
               search={search}
               filters={filters}
               view={view}
+              onView={(s) => navigate("/shifts")}
               onClaim={(shiftId) => claimMutation.mutate(shiftId)}
               claimingId={claimMutation.isPending ? claimMutation.variables : null}
             />

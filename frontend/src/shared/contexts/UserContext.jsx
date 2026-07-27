@@ -23,8 +23,10 @@ export const UserProvider = ({ children }) => {
     fetchUser();
   }, []);
 
+  const isAdmin = user?.role === "admin" || user?.role === "job_creator";
+
   return (
-    <UserContext.Provider value={{ user, loading }}>
+    <UserContext.Provider value={{ user, loading, isAdmin }}>
       {children}
     </UserContext.Provider>
   );

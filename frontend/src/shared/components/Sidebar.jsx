@@ -10,6 +10,7 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  Shield,
 } from "lucide-react";
 
 import { useLayout } from "../contexts/LayoutContext";
@@ -48,11 +49,20 @@ const navigation = [
   },
 ];
 
+const adminNavigation = [
+  {
+    title: "Admin Panel",
+    icon: Shield,
+    path: "/admin",
+  },
+];
+
 const Sidebar = () => {
   const {
     sidebarCollapsed,
     toggleSidebar,
   } = useLayout();
+  const { isAdmin } = useUser();
 
   return (
     <motion.aside
@@ -158,6 +168,36 @@ const Sidebar = () => {
             );
 
           })}
+
+          {isAdmin && (
+            <>
+              {adminNavigation.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <NavLink
+                    key={item.title}
+                    to={item.path}
+                    className={({ isActive }) =>
+                      `group flex items-center rounded-2xl transition-all duration-200 ${
+                        sidebarCollapsed
+                          ? "justify-center h-14"
+                          : "px-5 h-14"
+                      } ${
+                        isActive
+                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
+                          : "hover:bg-slate-900 text-slate-300"
+                      }`
+                    }
+                  >
+                    <Icon size={22} />
+                    {!sidebarCollapsed && (
+                      <span className="ml-4 font-medium">{item.title}</span>
+                    )}
+                  </NavLink>
+                );
+              })}
+            </>
+          )}
 
         </div>
 
