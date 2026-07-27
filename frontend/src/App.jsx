@@ -1,7 +1,28 @@
-export default function App() {
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+import DashboardPage from "./features/dashboard/pages/DashboardPage";
+import ShiftsPage from "./features/shifts/pages/ShiftsPage";
+import BrowseShiftsPage from "./features/browse-shifts/pages/BrowseShiftsPage";
+
+function App() {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold">ShiftGrid Frontend</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/shifts" element={<ShiftsPage />} />
+        <Route path="/browse-shifts" element={<BrowseShiftsPage />} />
+        <Route
+          path="*"
+          element={
+            <div className="flex items-center justify-center h-screen">
+              <p className="text-xl text-slate-500">Page not found</p>
+            </div>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
+
+export default App;
