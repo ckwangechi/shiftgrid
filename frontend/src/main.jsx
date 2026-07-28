@@ -5,6 +5,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { LayoutProvider } from "./shared/contexts/LayoutContext";
 import { UserProvider } from "./shared/contexts/UserContext";
+import { AuthProvider } from "./features/auth/context/AuthContext";
 
 const queryClient = new QueryClient();
 
