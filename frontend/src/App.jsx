@@ -20,35 +20,91 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/shifts" element={<ShiftsPage />} />
-        <Route path="/browse-shifts" element={<BrowseShiftsPage />} />
-        <Route path="/locations" element={<LocationsPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/preferences" element={<PreferencesPage />} />
-        <Route path="/admin" element={<AdminPage />} />
+        {/* Redirect */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+        {/* Public Routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+
+        {/* Protected Routes */}
         <Route
-          path="*"
+          path="/dashboard"
           element={
-            <div className="flex items-center justify-center h-screen">
-              <p className="text-xl text-slate-500">Page not found</p>
-            </div>
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
           }
         />
 
-{/* Public routes */}
-        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/browse-shifts"
+          element={
+            <ProtectedRoute>
+              <BrowseShiftsPage />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/shifts"
+          element={
+            <ProtectedRoute>
+              <ShiftsPage />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route
+          path="/locations"
+          element={
+            <ProtectedRoute>
+              <LocationsPage />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
-        
-{/* Admin */}
-        <Route path="/admin" element={ <AdminRoute> <Admin /> </AdminRoute> } />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
 
+        <Route
+          path="/preferences"
+          element={
+            <ProtectedRoute>
+              <PreferencesPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Route */}
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminPage />
+            </AdminRoute>
+          }
+        />
+
+        {/* 404 */}
+        <Route
+          path="*"
+          element={
+            <div className="flex h-screen items-center justify-center">
+              <h1 className="text-2xl font-semibold text-slate-500">
+                404 - Page Not Found
+              </h1>
+            </div>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
