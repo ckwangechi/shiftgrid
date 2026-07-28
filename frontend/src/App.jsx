@@ -8,6 +8,14 @@ import ProfilePage from "./features/profile/pages/ProfilePage";
 import PreferencesPage from "./features/profile/pages/PreferencesPage";
 import AdminPage from "./features/admin/pages/AdminPage";
 
+import LoginPage from "./features/auth/pages/LoginPage";
+import RegisterPage from "./features/auth/pages/RegisterPage";
+import ForgotPasswordPage from "./features/auth/pages/ForgotPasswordPage";
+import ResetPasswordPage from "./features/auth/pages/ResetPasswordPage";
+
+import ProtectedRoute from "./features/auth/components/ProtectedRoute";
+import AdminRoute from "./features/auth/components/AdminRoute";
+
 function App() {
   return (
     <BrowserRouter>
@@ -28,6 +36,19 @@ function App() {
             </div>
           }
         />
+
+{/* Public routes */}
+        <Route path="/login" element={<LoginPage />} />
+
+        <Route path="/register" element={<RegisterPage />} />
+
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        
+{/* Admin */}
+        <Route path="/admin" element={ <AdminRoute> <Admin /> </AdminRoute> } />
+
       </Routes>
     </BrowserRouter>
   );
