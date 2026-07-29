@@ -16,6 +16,8 @@ import {
 import { useLayout } from "../contexts/LayoutContext";
 import { useUser } from "../contexts/UserContext";
 
+import useAuth from "../../features/auth/hooks/useAuth";
+
 const navigation = [
   {
     title: "Dashboard",
@@ -214,6 +216,7 @@ const Sidebar = () => {
         </NavLink>
 
         <button
+          onClick={logout}
           className={`mt-6 bg-red-600 hover:bg-red-700 rounded-2xl transition h-12 flex items-center ${
             sidebarCollapsed
               ? "justify-center"
@@ -244,6 +247,8 @@ const Sidebar = () => {
 const UserProfile = () => {
   const { sidebarCollapsed } = useLayout();
   const { user, loading } = useUser();
+
+  const { logout } = useAuth();
 
   if (loading) {
     return (
