@@ -10,11 +10,9 @@ import BrowseToolbar from "../components/BrowseToolbar";
 import BrowseFilters from "../components/BrowseFilters";
 import BrowseGrid from "../components/BrowseGrid";
 import ShiftDetailsDrawer from "../../shifts/components/ShiftDetailsDrawer";
-import ClaimShiftModal from "../../shifts/components/ClaimShiftModal";
 
 const BrowseShiftsPage = () => {
   const [selectedShift, setSelectedShift] = useState(null);
-  const [claimShift, setClaimShift] = useState(null);
 
   const [search, setSearch] = useState("");
 
@@ -76,10 +74,7 @@ const BrowseShiftsPage = () => {
               filters={filters}
               view={view}
               onView={(shift) => setSelectedShift(shift)}
-              onClaim={(shiftId) => {
-                const shift = shifts.find((s) => s.id === shiftId);
-                setClaimShift(shift ?? null);
-              }}
+              onClaim={(shiftId) => claimMutation.mutate(shiftId)}
               claimingId={claimMutation.isPending ? claimMutation.variables : null}
             />
           </main>
@@ -89,20 +84,6 @@ const BrowseShiftsPage = () => {
           shift={selectedShift}
           isOpen={!!selectedShift}
           onClose={() => setSelectedShift(null)}
-          onClaim={() => {
-            setClaimShift(selectedShift);
-            setSelectedShift(null);
-          }}
-        />
-
-        <ClaimShiftModal
-          open={!!claimShift}
-          shift={claimShift}
-          onClose={() => setClaimShift(null)}
-          onConfirm={(shift) => {
-            claimMutation.mutate(shift.id);
-            setClaimShift(null);
-          }}
         />
       </div>
     </DashboardLayout>
