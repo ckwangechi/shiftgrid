@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getAdminShifts,
+  createShift,
   updateShift,
   deleteShift,
   getAdminLocations,
@@ -20,6 +21,21 @@ export const useAdminShifts = (params = {}) =>
     queryFn: () => getAdminShifts(params),
     staleTime: 2 * 60 * 1000,
   });
+
+export const useCreateShift = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: createShift,
+    onSuccess: () => {
+      toast.success("Shift created");
+      queryClient.invalidateQueries({ queryKey: ["admin-shifts"] });
+      queryClient.invalidateQueries({ queryKey: ["created-shifts"] });
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to create shift");
+    },
+  });
+};
 
 export const useUpdateShift = () => {
   const queryClient = useQueryClient();

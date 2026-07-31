@@ -28,12 +28,16 @@ const LoginPage = () => {
     setError("");
 
     try {
-      await login(formData.email, formData.password);
-      navigate("/dashboard");
-    } catch (err) {
-      setError(
-        err.response?.data?.message || "Invalid email or password."
+      const user = await login(formData.email, formData.password);
+      navigate(
+        user?.role === "admin"
+          ? "/admin/dashboard"
+          : user?.role === "job_creator"
+            ? "/creator"
+            : "/dashboard"
       );
+    } catch (err) {
+      setError(err.message || "Invalid email or password.");
     } finally {
       setLoading(false);
     }

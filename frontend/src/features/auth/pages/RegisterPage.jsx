@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import { useSkills } from "../../skills/hooks/useSkills";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
+  const { data: skillsData } = useSkills();
 
   const [formData, setFormData] = useState({
     username: "",
@@ -16,14 +18,9 @@ const RegisterPage = () => {
 
   const [error, setError] = useState("");
 
-  const availableSkills = [
-    "First Aid",
-    "Security",
-    "Registration",
-    "Stage Crew",
-    "Photography",
-    "Logistics",
-  ];
+  const availableSkills = (skillsData?.data ?? skillsData ?? []).map(
+    (s) => s.name
+  );
 
   const handleSkillChange = (skill) => {
     if (formData.skills.includes(skill)) {
@@ -47,16 +44,22 @@ const RegisterPage = () => {
     }
 
     try {
-      await register({
+      const user = await register({
         username: formData.username,
         email: formData.email,
         password: formData.password,
         skills: formData.skills,
       });
 
-      navigate("/login");
+      navigate(
+        user?.role === "admin"
+          ? "/admin/dashboard"
+          : user?.role === "job_creator"
+            ? "/creator"
+            : "/dashboard"
+      );
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed.");
+      setError(err.message || "Registration failed.");
     }
   };
 
@@ -114,17 +117,23 @@ const RegisterPage = () => {
 
         <h2 className="font-semibold mb-2">Select Your Skills</h2>
 
-        <div className="grid grid-cols-2 gap-2 mb-6">
-          {availableSkills.map((skill) => (
-            <label key={skill}>
-              <input
-                type="checkbox"
-                onChange={() => handleSkillChange(skill)}
-              />
-              <span className="ml-2">{skill}</span>
-            </label>
-          ))}
-        </div>
+        {availableSkills.length === 0 ? (
+          <p className="text-sm text-slate-400 mb-6">
+            Loading available skills...
+          </p>
+        ) : (
+          <div className="grid grid-cols-2 gap-2 mb-6">
+            {availableSkills.map((skill) => (
+              <label key={skill}>
+                <input
+                  type="checkbox"
+                  onChange={() => handleSkillChange(skill)}
+                />
+                <span className="ml-2">{skill}</span>
+              </label>
+            ))}
+          </div>
+        )}
 
         <button className="w-full bg-green-600 text-white p-3 rounded">
           Register

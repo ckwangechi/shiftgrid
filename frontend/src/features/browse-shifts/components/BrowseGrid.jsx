@@ -1,8 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import BrowseCard from "./BrowseCard";
 
 const BrowseGrid = ({ shifts = [], isLoading, error, search, filters, view, onClaim, claimingId, onView }) => {
-  const navigate = useNavigate();
   if (error) {
     return (
       <div id="browse-grid" className="rounded-3xl border border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20 p-8 text-center">
@@ -54,7 +52,7 @@ const BrowseGrid = ({ shifts = [], isLoading, error, search, filters, view, onCl
         <BrowseCard
           key={shift.id}
           shift={shift}
-          onView={(s) => navigate(`/shifts`)}
+          onView={onView}
           onClaim={onClaim}
           isClaiming={claimingId === shift.id}
         />

@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard,
@@ -11,6 +11,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Shield,
+  PlusCircle,
+  Bell,
 } from "lucide-react";
 
 import { useLayout } from "../contexts/LayoutContext";
@@ -18,7 +20,7 @@ import { useUser } from "../contexts/UserContext";
 
 import useAuth from "../../features/auth/hooks/useAuth";
 
-const navigation = [
+const seekerNavigation = [
   {
     title: "Dashboard",
     icon: LayoutDashboard,
@@ -40,6 +42,39 @@ const navigation = [
     path: "/locations",
   },
   {
+    title: "Notifications",
+    icon: Bell,
+    path: "/notifications",
+  },
+  {
+    title: "Profile",
+    icon: UserCircle,
+    path: "/profile",
+  },
+  {
+    title: "Preferences",
+    icon: Settings,
+    path: "/preferences",
+  },
+];
+
+const creatorNavigation = [
+  {
+    title: "Dashboard",
+    icon: LayoutDashboard,
+    path: "/dashboard",
+  },
+  {
+    title: "Create Shift",
+    icon: PlusCircle,
+    path: "/creator",
+  },
+  {
+    title: "Locations",
+    icon: MapPinned,
+    path: "/locations",
+  },
+  {
     title: "Profile",
     icon: UserCircle,
     path: "/profile",
@@ -53,9 +88,19 @@ const navigation = [
 
 const adminNavigation = [
   {
+    title: "Dashboard",
+    icon: LayoutDashboard,
+    path: "/admin/dashboard",
+  },
+  {
     title: "Admin Panel",
     icon: Shield,
     path: "/admin",
+  },
+  {
+    title: "Profile",
+    icon: UserCircle,
+    path: "/profile",
   },
 ];
 
@@ -64,7 +109,22 @@ const Sidebar = () => {
     sidebarCollapsed,
     toggleSidebar,
   } = useLayout();
-  const { isAdmin } = useUser();
+  const { user } = useUser();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const role = user?.role;
+  const items =
+    role === "admin"
+      ? adminNavigation
+      : role === "job_creator"
+        ? creatorNavigation
+        : seekerNavigation;
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <motion.aside
@@ -131,7 +191,7 @@ const Sidebar = () => {
 
         <div className="space-y-3">
 
-          {navigation.map((item) => {
+          {items.map((item) => {
 
             const Icon = item.icon;
 
@@ -171,36 +231,6 @@ const Sidebar = () => {
 
           })}
 
-          {isAdmin && (
-            <>
-              {adminNavigation.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <NavLink
-                    key={item.title}
-                    to={item.path}
-                    className={({ isActive }) =>
-                      `group flex items-center rounded-2xl transition-all duration-200 ${
-                        sidebarCollapsed
-                          ? "justify-center h-14"
-                          : "px-5 h-14"
-                      } ${
-                        isActive
-                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
-                          : "hover:bg-slate-900 text-slate-300"
-                      }`
-                    }
-                  >
-                    <Icon size={22} />
-                    {!sidebarCollapsed && (
-                      <span className="ml-4 font-medium">{item.title}</span>
-                    )}
-                  </NavLink>
-                );
-              })}
-            </>
-          )}
-
         </div>
 
       </div>
@@ -216,7 +246,7 @@ const Sidebar = () => {
         </NavLink>
 
         <button
-          onClick={logout}
+          onClick={handleLogout}
           className={`mt-6 bg-red-600 hover:bg-red-700 rounded-2xl transition h-12 flex items-center ${
             sidebarCollapsed
               ? "justify-center"
@@ -247,8 +277,6 @@ const Sidebar = () => {
 const UserProfile = () => {
   const { sidebarCollapsed } = useLayout();
   const { user, loading } = useUser();
-
-  const { logout } = useAuth();
 
   if (loading) {
     return (

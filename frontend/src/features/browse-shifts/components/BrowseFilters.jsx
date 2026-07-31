@@ -1,6 +1,9 @@
 import { RotateCcw, MapPin, BriefcaseBusiness, Clock3, CalendarDays, DollarSign, Star } from "lucide-react";
+import { useSkills } from "../../skills/hooks/useSkills";
 
 const BrowseFilters = ({ filters, setFilters }) => {
+  const { data: skillsData } = useSkills();
+  const skills = (skillsData?.data ?? skillsData ?? []).map((s) => s.name);
 
   const updateFilter = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -69,12 +72,9 @@ const BrowseFilters = ({ filters, setFilters }) => {
             className="w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-slate-900 dark:text-white"
           >
             <option value="">All Categories</option>
-            <option>Security</option>
-            <option>Registration</option>
-            <option>Hospitality</option>
-            <option>Logistics</option>
-            <option>Cleaning</option>
-            <option>Customer Service</option>
+            {skills.map((skill) => (
+              <option key={skill}>{skill}</option>
+            ))}
           </select>
         </div>
 

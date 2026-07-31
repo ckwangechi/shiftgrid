@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { useProfile, useUpdateProfile, useChangePassword, usePreferences } from "../hooks/useProfile";
 import { useMyShifts } from "../../shifts/hooks/useShifts";
+import { useSkills } from "../../skills/hooks/useSkills";
 
 import DashboardLayout from "../../../shared/layouts/DashboardLayout";
 
@@ -9,12 +10,14 @@ const ProfilePage = () => {
   const { data: userData, isLoading, error } = useProfile();
   const { data: prefsData } = usePreferences();
   const { data: shiftsData } = useMyShifts();
+  const { data: skillsData } = useSkills();
   const updateProfileMutation = useUpdateProfile();
   const changePasswordMutation = useChangePassword();
 
   const user = userData?.data ?? userData ?? null;
   const prefs = prefsData?.data ?? prefsData ?? {};
   const shifts = shiftsData?.data ?? [];
+  const allSkills = (skillsData?.data ?? skillsData ?? []).map((s) => s.name);
 
   const [formData, setFormData] = useState({
     name: user?.name ?? "",
@@ -47,18 +50,6 @@ const ProfilePage = () => {
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
     setPasswordData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSkillChange = (e) => {
-    const { value } = e.target;
-    if (value && !skills.includes(value)) {
-      setSkills((prev) => [...prev, value]);
-    }
-    e.target.value = "";
-  };
-
-  const removeSkill = (skill) => {
-    setSkills((prev) => prev.filter((s) => s !== skill));
   };
 
   const toggleArrayItem = (setter, item) => {
@@ -191,39 +182,36 @@ const ProfilePage = () => {
           </h2>
 
           <div className="flex flex-wrap gap-2">
-            {skills.map((skill) => (
-              <span
-                key={skill}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-medium"
-              >
-                {skill}
+            {allSkills.map((skill) => {
+              const checked = skills.includes(skill);
+              return (
                 <button
-                  onClick={() => removeSkill(skill)}
-                  className="text-blue-400 hover:text-red-500 transition"
+                  key={skill}
+                  type="button"
+                  onClick={() =>
+                    setSkills((prev) =>
+                      checked
+                        ? prev.filter((s) => s !== skill)
+                        : [...prev, skill]
+                    )
+                  }
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                    checked
+                      ? "bg-blue-600 text-white"
+                      : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
+                  }`}
                 >
-                  ×
+                  {checked ? "✓ " : ""}
+                  {skill}
                 </button>
-              </span>
-            ))}
+              );
+            })}
           </div>
 
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="Add a skill..."
-              className="flex-1 h-12 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 outline-none focus:ring-2 focus:ring-blue-500"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  const value = e.target.value.trim();
-                  if (value && !skills.includes(value)) {
-                    setSkills((prev) => [...prev, value]);
-                  }
-                  e.target.value = "";
-                }
-              }}
-            />
-          </div>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Skills shown come from shifts posted by job creators. Save your
+            profile after marking your skills.
+          </p>
         </section>
 
         {/* Claimed Shifts */}

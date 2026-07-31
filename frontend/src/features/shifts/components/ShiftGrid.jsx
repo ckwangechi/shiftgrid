@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import toast from "react-hot-toast";
 
 import ShiftCard from "./ShiftCard";
 import ShiftDetailsDrawer from "./ShiftDetailsDrawer";
@@ -12,6 +11,7 @@ const ShiftGrid = ({
   filters,
   sortBy,
   view,
+  onClaim,
 }) => {
   const [selectedShift, setSelectedShift] = useState(null);
   const [claimShift, setClaimShift] = useState(null);
@@ -194,7 +194,7 @@ const ShiftGrid = ({
         shift={claimShift}
         onClose={() => setClaimShift(null)}
         onConfirm={(shift) => {
-          toast.success(`Successfully claimed "${shift.title}"`);
+          onClaim?.(shift.id);
           setClaimShift(null);
         }}
       />

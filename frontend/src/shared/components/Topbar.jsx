@@ -100,7 +100,10 @@ const Topbar = () => {
 
           {/* Notifications */}
 
-          <button className="relative w-11 h-11 rounded-xl bg-white dark:bg-slate-900 text-slate-700 dark:text-white border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center justify-center">
+          <button
+            onClick={() => navigate("/notifications")}
+            className="relative w-11 h-11 rounded-xl bg-white dark:bg-slate-900 text-slate-700 dark:text-white border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center justify-center"
+          >
 
             <Bell size={20} />
 

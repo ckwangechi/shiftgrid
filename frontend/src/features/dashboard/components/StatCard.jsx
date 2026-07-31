@@ -1,9 +1,11 @@
 import { TrendingUp } from "lucide-react";
+import { getIcon } from "../../../shared/utils/icons";
 
 const StatCard = ({ stat }) => {
   if (!stat) return null;
 
-  const { title, value, change, icon: Icon, color } = stat;
+  const { title, value, change, icon, color } = stat;
+  const Icon = getIcon(icon);
 
   return (
     <div className="group relative overflow-hidden rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">

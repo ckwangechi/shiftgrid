@@ -9,6 +9,13 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+    setUser(null);
+    window.dispatchEvent(new Event("auth-change"));
+  };
+
   useEffect(() => {
     const initializeAuth = async () => {
       const storedToken = localStorage.getItem("token");
@@ -19,7 +26,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       try {
-        const { data } = await api.get("/api/auth/me");
+        const { data } = await api.get("/auth/me");
 
         setUser(data);
         setToken(storedToken);
@@ -35,7 +42,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const { data } = await api.post("/api/auth/login", {
+    const { data } = await api.post("/auth/login", {
       email,
       password,
     });
@@ -44,21 +51,34 @@ export const AuthProvider = ({ children }) => {
 
     setToken(data.access_token);
 
-    const profile = await api.get("/api/auth/me");
+    const profile = await api.get("/auth/me");
 
     setUser(profile.data);
+
+    window.dispatchEvent(new Event("auth-change"));
 
     return profile.data;
   };
 
   const register = async (payload) => {
-    return await api.post("/api/auth/register", payload);
-  };
+    const res = await api.post("/auth/register", payload);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
-    setUser(null);
+    const { data } = await api.post("/auth/login", {
+      email: payload.email,
+      password: payload.password,
+    });
+
+    localStorage.setItem("token", data.access_token);
+
+    setToken(data.access_token);
+
+    const profile = await api.get("/auth/me");
+
+    setUser(profile.data);
+
+    window.dispatchEvent(new Event("auth-change"));
+
+    return profile.data;
   };
 
   const value = {

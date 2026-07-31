@@ -15,5 +15,8 @@ export const getMyShifts = (params = {}) =>
 export const getMyShiftsStats = () =>
   api.get("/shifts/my/stats");
 
+export const getCreatedShifts = () =>
+  api.get("/shifts/created");
+
 export const releaseShift = (shiftId) =>
   api.post(`/shifts/${shiftId}/release`);

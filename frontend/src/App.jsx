@@ -7,6 +7,10 @@ import LocationsPage from "./features/locations/pages/LocationsPage";
 import ProfilePage from "./features/profile/pages/ProfilePage";
 import PreferencesPage from "./features/profile/pages/PreferencesPage";
 import AdminPage from "./features/admin/pages/AdminPage";
+import AdminDashboardPage from "./features/admin/pages/AdminDashboardPage";
+import CreatorPage from "./features/creator/pages/CreatorPage";
+import NewSkillsPage from "./features/skills/pages/NewSkillsPage";
+import NotificationsPage from "./features/notifications/pages/NotificationsPage";
 
 import LoginPage from "./features/auth/pages/LoginPage";
 import RegisterPage from "./features/auth/pages/RegisterPage";
@@ -15,13 +19,36 @@ import ResetPasswordPage from "./features/auth/pages/ResetPasswordPage";
 
 import ProtectedRoute from "./features/auth/components/ProtectedRoute";
 import AdminRoute from "./features/auth/components/AdminRoute";
+import CreatorRoute from "./features/auth/components/CreatorRoute";
+import { useUser } from "./shared/contexts/UserContext";
+
+const HomeRedirect = () => {
+  const { user, loading } = useUser();
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <h1 className="text-xl font-semibold">Loading...</h1>
+      </div>
+    );
+  }
+
+  const path =
+    user?.role === "admin"
+      ? "/admin/dashboard"
+      : user?.role === "job_creator"
+        ? "/creator"
+        : "/dashboard";
+
+  return <Navigate to={path} replace />;
+};
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         {/* Redirect */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/" element={<HomeRedirect />} />
 
         {/* Public Routes */}
         <Route path="/login" element={<LoginPage />} />
@@ -58,11 +85,38 @@ function App() {
         />
 
         <Route
+          path="/new-skills"
+          element={
+            <ProtectedRoute>
+              <NewSkillsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/locations"
           element={
             <ProtectedRoute>
               <LocationsPage />
             </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <NotificationsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/creator"
+          element={
+            <CreatorRoute>
+              <CreatorPage />
+            </CreatorRoute>
           }
         />
 
@@ -84,7 +138,16 @@ function App() {
           }
         />
 
-        {/* Admin Route */}
+        {/* Admin Routes */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <AdminRoute>
+              <AdminDashboardPage />
+            </AdminRoute>
+          }
+        />
+
         <Route
           path="/admin"
           element={

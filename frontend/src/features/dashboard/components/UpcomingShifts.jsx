@@ -1,7 +1,7 @@
 import { Search, Filter, Eye } from "lucide-react";
 
 const statusBadge = {
-  Confirmed:
+  Claimed:
     "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400",
   Pending:
     "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400",

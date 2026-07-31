@@ -1,6 +1,7 @@
 import DashboardLayout from "../../../shared/layouts/DashboardLayout";
 
 import { useDashboardStats, useWeeklyAnalytics, useUpcomingShifts, useNotifications, useRecommendedShifts, useRecentActivity } from "../hooks/useDashboard";
+import { useClaimShift } from "../../shifts/hooks/useClaimShift";
 import { useUser } from "../../../shared/contexts/UserContext";
 
 import StatsGrid from "../components/StatsGrid";
@@ -54,6 +55,8 @@ const DashboardPage = () => {
     error: activityError,
   } = useRecentActivity();
 
+  const claimMutation = useClaimShift();
+
   const isLoading =
     statsLoading || analyticsLoading || upcomingLoading || notificationsLoading || recommendedLoading || activityLoading;
 
@@ -73,7 +76,10 @@ const DashboardPage = () => {
         transition={{ duration: 0.5 }}
         className="space-y-8"
       >
-        <WelcomeCard userName={userName} />
+        <WelcomeCard
+          userName={userName}
+          upcomingShifts={upcomingData?.data ?? []}
+        />
 
         <StatsGrid
           stats={statsData?.data ?? []}
@@ -113,6 +119,7 @@ const DashboardPage = () => {
               shifts={recommendedData?.data ?? []}
               isLoading={recommendedLoading}
               error={recommendedError}
+              onClaim={(shiftId) => claimMutation.mutate(shiftId)}
             />
           </div>
         </section>

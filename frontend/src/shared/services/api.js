@@ -22,8 +22,11 @@ api.interceptors.response.use(
     const message =
       error.response?.data?.message || error.message || "Something went wrong";
     if (error.response?.status === 401) {
+      const hadToken = localStorage.getItem("token");
       localStorage.removeItem("token");
-      window.location.href = "/login";
+      if (hadToken && window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
     }
     return Promise.reject(new Error(message));
   }

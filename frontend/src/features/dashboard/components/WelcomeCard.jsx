@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Plus } from "lucide-react";
+import { ArrowRight, CalendarClock } from "lucide-react";
 
 const getGreeting = () => {
   const hour = new Date().getHours();
@@ -9,7 +9,7 @@ const getGreeting = () => {
   return "Good Night";
 };
 
-const WelcomeCard = ({ userName }) => {
+const WelcomeCard = ({ userName, upcomingShifts = [] }) => {
   const navigate = useNavigate();
   const greeting = getGreeting();
   const displayName = userName || "there";
@@ -50,18 +50,50 @@ const WelcomeCard = ({ userName }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-5">
-          <div className="rounded-2xl bg-white/10 backdrop-blur p-5">
-            <Plus size={32} />
-            <h3 className="mt-4 text-3xl font-bold">0</h3>
-            <p className="text-blue-100">Upcoming Shifts</p>
+        <div className="w-full lg:max-w-sm space-y-3">
+          <div className="flex items-center gap-3 rounded-2xl bg-white/10 backdrop-blur px-5 py-4">
+            <CalendarClock size={24} className="shrink-0" />
+            <div>
+              <h3 className="text-2xl font-bold leading-none">
+                {upcomingShifts.length}
+              </h3>
+              <p className="text-sm text-blue-100">
+                Upcoming Shift{upcomingShifts.length !== 1 ? "s" : ""} You
+                Chose
+              </p>
+            </div>
           </div>
 
-          <div className="rounded-2xl bg-white/10 backdrop-blur p-5">
-            <ArrowRight size={32} />
-            <h3 className="mt-4 text-3xl font-bold">—</h3>
-            <p className="text-blue-100">Attendance</p>
-          </div>
+          {upcomingShifts.slice(0, 3).map((shift) => (
+            <div
+              key={shift.id}
+              className="flex items-center justify-between gap-3 rounded-2xl bg-white/10 backdrop-blur px-5 py-3"
+            >
+              <div className="min-w-0">
+                <h4 className="font-semibold truncate">{shift.role}</h4>
+                <p className="text-sm text-blue-100 truncate">
+                  {shift.location} · {shift.date}
+                </p>
+              </div>
+              <ArrowRight
+                size={18}
+                className="shrink-0 text-blue-200 cursor-pointer"
+                onClick={() => navigate("/shifts")}
+              />
+            </div>
+          ))}
+
+          {upcomingShifts.length === 0 && (
+            <button
+              onClick={() => navigate("/browse-shifts")}
+              className="w-full rounded-2xl bg-white/10 backdrop-blur px-5 py-4 text-left hover:bg-white/20 transition"
+            >
+              <h4 className="font-semibold">No shifts chosen yet</h4>
+              <p className="text-sm text-blue-100">
+                Browse and claim your first shift
+              </p>
+            </button>
+          )}
         </div>
       </div>
     </section>

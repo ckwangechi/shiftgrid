@@ -21,7 +21,7 @@ const ResetPasswordPage = () => {
     }
 
     try {
-      await api.post("/api/auth/reset-password", {
+      await api.post("/auth/reset-password", {
         token: formData.token,
         password: formData.password,
       });

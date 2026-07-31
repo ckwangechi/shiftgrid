@@ -13,6 +13,11 @@ export const useClaimShift = () => {
       toast.success("Shift claimed successfully");
       queryClient.invalidateQueries({ queryKey: ["my-shifts"] });
       queryClient.invalidateQueries({ queryKey: ["upcoming-shifts"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-stats"] });
+      queryClient.invalidateQueries({ queryKey: ["recommended-shifts"] });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      queryClient.invalidateQueries({ queryKey: ["recent-activity"] });
+      queryClient.invalidateQueries({ queryKey: ["browse-shifts"] });
       navigate("/shifts");
     },
     onError: (error) => {

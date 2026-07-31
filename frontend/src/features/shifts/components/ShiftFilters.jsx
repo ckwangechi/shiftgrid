@@ -5,8 +5,12 @@ import {
   CalendarDays,
   RotateCcw,
 } from "lucide-react";
+import { useSkills } from "../../skills/hooks/useSkills";
 
 const ShiftFilters = ({ filters, setFilters }) => {
+  const { data: skillsData } = useSkills();
+  const skills = (skillsData?.data ?? skillsData ?? []).map((s) => s.name);
+
   const updateFilter = (name, value) => {
     setFilters((prev) => ({
       ...prev,
@@ -80,6 +84,11 @@ const ShiftFilters = ({ filters, setFilters }) => {
             className="w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-slate-900 dark:text-white"
           >
             <option value="">All Skills</option>
+            {skills.map((skill) => (
+              <option key={skill} value={skill}>
+                {skill}
+              </option>
+            ))}
           </select>
 
         </div>

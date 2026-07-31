@@ -1,6 +1,10 @@
 import { Bell } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { getIcon } from "../../../shared/utils/icons";
 
 const NotificationCard = ({ notifications = [], isLoading, error }) => {
+  const navigate = useNavigate();
+
   if (error) {
     return (
       <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
@@ -70,11 +74,12 @@ const NotificationCard = ({ notifications = [], isLoading, error }) => {
 
       <div className="divide-y divide-slate-200 dark:divide-slate-800">
         {notifications.map((item) => {
-          const Icon = item.icon;
+          const Icon = getIcon(item.icon);
 
           return (
             <div
               key={item.id}
+              onClick={() => item.link && navigate(item.link)}
               className="p-5 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition cursor-pointer"
             >
               <div className="flex gap-4">

@@ -13,6 +13,8 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
+    username = db.Column(db.String(80), unique=True, nullable=False)
+
     full_name = db.Column(db.String(120), nullable=False)
 
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -56,7 +58,8 @@ class User(db.Model):
 
     claimed_shifts = relationship(
         "Shift",
-        back_populates="claimed_by"
+        foreign_keys="Shift.user_id",
+        back_populates="claimed_by",
     )
 
 class SkillTag(db.Model):
@@ -70,6 +73,10 @@ class SkillTag(db.Model):
         nullable=False
     )
 
+    description = db.Column(db.String(255))
+
+    difficulty_level = db.Column(db.String(20))
+
 class EventLocation(db.Model):
     __tablename__ = "event_location"
 
@@ -79,9 +86,13 @@ class EventLocation(db.Model):
 
     address = db.Column(db.Text)
 
+    city = db.Column(db.String(80))
+
     coordinates = db.Column(db.String(50))
 
     capacity = db.Column(db.Integer)
+
+    notes = db.Column(db.Text)
 
     created_at = db.Column(
         db.DateTime,
@@ -97,9 +108,17 @@ class Shift(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    title = db.Column(db.String(120), nullable=False)
+    role_title = db.Column(db.String(120), nullable=False)
+
+    title = db.Column(db.String(120), nullable=True)
 
     description = db.Column(db.Text)
+
+    company = db.Column(db.String(120))
+
+    pay = db.Column(db.Integer)
+
+    status = db.Column(db.String(20), default="Open")
 
     start_time = db.Column(
         db.DateTime,
@@ -123,9 +142,16 @@ class Shift(db.Model):
         db.ForeignKey("event_location.id")
     )
 
-    claimed_by_id = db.Column(
+    user_id = db.Column(
         db.Integer,
-        db.ForeignKey("user.id")
+        db.ForeignKey("user.id"),
+        nullable=True
+    )
+
+    created_by = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=True
     )
 
     location = relationship(
@@ -135,7 +161,13 @@ class Shift(db.Model):
 
     claimed_by = relationship(
         "User",
-        back_populates="claimed_shifts"
+        foreign_keys=[user_id],
+        back_populates="claimed_shifts",
+    )
+
+    creator = relationship(
+        "User",
+        foreign_keys=[created_by],
     )
 
 class PasswordResetToken(db.Model):
@@ -182,16 +214,28 @@ class UserPreference(db.Model):
         nullable=False
     )
 
-    preferred_locations = db.Column(db.Text)
+    preferred_location = db.Column(db.String(120))
 
-    preferred_times = db.Column(db.Text)
+    preferred_shift_time = db.Column(db.String(50))
 
-    preferred_event_types = db.Column(db.Text)
+    preferred_event_type = db.Column(db.String(80))
 
     notifications_enabled = db.Column(
         db.Boolean,
         default=True
     )
+
+    email_notifications = db.Column(db.Boolean, default=True)
+
+    shift_reminders = db.Column(db.Boolean, default=True)
+
+    weekly_summary = db.Column(db.Boolean, default=False)
+
+    dark_mode = db.Column(db.Boolean, default=False)
+
+    language = db.Column(db.String(20), default="en")
+
+    timezone = db.Column(db.String(50), default="UTC")
 
     user = relationship(
         "User",

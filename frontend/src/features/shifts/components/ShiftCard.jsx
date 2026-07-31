@@ -127,6 +127,7 @@ const ShiftCard = ({ shift, onView, onClaim }) => {
 
           <button
             onClick={() => onClaim(shift.id)}
+            disabled={shift.claimed}
             className="
     flex-1
     py-3
@@ -150,9 +151,16 @@ const ShiftCard = ({ shift, onView, onClaim }) => {
     hover:shadow-lg
     hover:shadow-blue-500/30
     active:scale-95
+    disabled:opacity-50
+    disabled:cursor-not-allowed
+    disabled:hover:bg-blue-50
+    disabled:hover:text-blue-700
+    disabled:hover:border-blue-500/30
+    disabled:hover:shadow-none
+    disabled:active:scale-100
   "
           >
-            Claim
+            {shift.claimed ? "Claimed" : "Claim"}
           </button>
 
         </div>

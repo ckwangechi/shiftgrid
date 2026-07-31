@@ -3,6 +3,9 @@ import api from "../../../shared/services/api";
 export const getAdminShifts = (params = {}) =>
   api.get("/admin/shifts", { params });
 
+export const createShift = (data) =>
+  api.post("/shifts/create", data);
+
 export const updateShift = (id, data) =>
   api.put(`/admin/shifts/${id}`, data);
 

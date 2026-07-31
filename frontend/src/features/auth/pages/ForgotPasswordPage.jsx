@@ -9,7 +9,7 @@ const ForgotPasswordPage = () => {
     e.preventDefault();
 
     try {
-      await api.post("/api/auth/forgot-password", {
+      await api.post("/auth/forgot-password", {
         email,
       });
 

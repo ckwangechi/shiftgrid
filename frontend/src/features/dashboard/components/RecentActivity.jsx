@@ -1,3 +1,5 @@
+import { getIcon } from "../../../shared/utils/icons";
+
 const defaultColorMap = {
   CheckCircle2: "bg-green-500",
   MapPin: "bg-blue-500",
@@ -70,7 +72,7 @@ const RecentActivity = ({ activities = [], isLoading, error }) => {
 
           <div className="space-y-8">
             {activities.map((activity) => {
-              const Icon = activity.icon;
+              const Icon = getIcon(activity.icon);
               const color = activity.color ?? defaultColorMap[Icon?.name] ?? "bg-slate-500";
 
               return (

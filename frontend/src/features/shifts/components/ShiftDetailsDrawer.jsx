@@ -138,9 +138,17 @@ Verified Employer ⭐ 4.9 Rating
 <footer className="p-6 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
 
 
-<button onClick={onClaim} className="w-full py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg transition">
+<button
+  onClick={onClaim}
+  disabled={shift.claimed}
+  className={
+    shift.claimed
+      ? "w-full py-4 rounded-2xl bg-slate-400 text-white font-bold text-lg cursor-not-allowed transition"
+      : "w-full py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg transition"
+  }
+>
 
-Claim Shift
+  {shift.claimed ? "Claimed" : "Claim Shift"}
 
 </button>
 

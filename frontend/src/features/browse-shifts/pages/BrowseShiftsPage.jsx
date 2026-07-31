@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import { useNavigate } from "react-router-dom";
-
 import { useBrowseShifts } from "../hooks/useBrowseShifts";
 import { useClaimShift } from "../../shifts/hooks/useClaimShift";
 
@@ -11,9 +9,12 @@ import BrowseHero from "../components/BrowseHero";
 import BrowseToolbar from "../components/BrowseToolbar";
 import BrowseFilters from "../components/BrowseFilters";
 import BrowseGrid from "../components/BrowseGrid";
+import ShiftDetailsDrawer from "../../shifts/components/ShiftDetailsDrawer";
+import ClaimShiftModal from "../../shifts/components/ClaimShiftModal";
 
 const BrowseShiftsPage = () => {
-  const navigate = useNavigate();
+  const [selectedShift, setSelectedShift] = useState(null);
+  const [claimShift, setClaimShift] = useState(null);
 
   const [search, setSearch] = useState("");
 
@@ -74,12 +75,35 @@ const BrowseShiftsPage = () => {
               search={search}
               filters={filters}
               view={view}
-              onView={(s) => navigate("/shifts")}
-              onClaim={(shiftId) => claimMutation.mutate(shiftId)}
+              onView={(shift) => setSelectedShift(shift)}
+              onClaim={(shiftId) => {
+                const shift = shifts.find((s) => s.id === shiftId);
+                setClaimShift(shift ?? null);
+              }}
               claimingId={claimMutation.isPending ? claimMutation.variables : null}
             />
           </main>
         </div>
+
+        <ShiftDetailsDrawer
+          shift={selectedShift}
+          isOpen={!!selectedShift}
+          onClose={() => setSelectedShift(null)}
+          onClaim={() => {
+            setClaimShift(selectedShift);
+            setSelectedShift(null);
+          }}
+        />
+
+        <ClaimShiftModal
+          open={!!claimShift}
+          shift={claimShift}
+          onClose={() => setClaimShift(null)}
+          onConfirm={(shift) => {
+            claimMutation.mutate(shift.id);
+            setClaimShift(null);
+          }}
+        />
       </div>
     </DashboardLayout>
   );
