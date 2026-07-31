@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 import ShiftCard from "./ShiftCard";
 import ShiftDetailsDrawer from "./ShiftDetailsDrawer";
 import ClaimShiftModal from "./ClaimShiftModal";
+import CancelShiftModal from "./CancelShiftModal";
 import Pagination from "./Pagination";
+import { useCancelShift } from "../hooks/useCancelShift";
 
 const ShiftGrid = ({
   shifts,
@@ -15,6 +17,9 @@ const ShiftGrid = ({
 }) => {
   const [selectedShift, setSelectedShift] = useState(null);
   const [claimShift, setClaimShift] = useState(null);
+  const [cancelShift, setCancelShift] = useState(null);
+
+  const cancelMutation = useCancelShift();
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -145,6 +150,7 @@ const ShiftGrid = ({
               setClaimShift(shift);
               setSelectedShift(null);
             }}
+            onCancel={() => setCancelShift(shift)}
           />
         ))}
       </section>
@@ -185,6 +191,10 @@ const ShiftGrid = ({
           setClaimShift(selectedShift);
           setSelectedShift(null);
         }}
+        onCancel={() => {
+          setCancelShift(selectedShift);
+          setSelectedShift(null);
+        }}
       />
 
       {/* Claim Modal */}
@@ -196,6 +206,18 @@ const ShiftGrid = ({
         onConfirm={(shift) => {
           onClaim?.(shift.id);
           setClaimShift(null);
+        }}
+      />
+
+      {/* Cancel Modal */}
+
+      <CancelShiftModal
+        open={!!cancelShift}
+        shift={cancelShift}
+        onClose={() => setCancelShift(null)}
+        onConfirm={(shift) => {
+          cancelMutation.mutate(shift.id);
+          setCancelShift(null);
         }}
       />
     </>

@@ -4,10 +4,11 @@ import {
   MapPin,
   Users,
   Award,
-  ArrowRight,
+  Hand,
+  XCircle,
 } from "lucide-react";
 
-const ShiftCard = ({ shift, onView, onClaim }) => {
+const ShiftCard = ({ shift, onView, onClaim, onCancel }) => {
   return (
     <div className="group rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
 
@@ -125,10 +126,68 @@ const ShiftCard = ({ shift, onView, onClaim }) => {
             View Details
           </button>
 
-          <button
-            onClick={() => onClaim(shift.id)}
-            disabled={shift.claimed}
-            className="
+          {shift.claimed ? (
+            <>
+              <button
+                disabled
+                className="
+    flex-1
+    py-3
+    rounded-xl
+    border
+    border-slate-300
+    bg-slate-100
+    dark:bg-slate-800
+    dark:border-slate-700
+    text-slate-400
+    dark:text-slate-500
+    font-semibold
+    flex
+    items-center
+    justify-center
+    gap-2
+    cursor-not-allowed
+  "
+              >
+                <Hand size={16} />
+                Claimed
+              </button>
+
+              <button
+                onClick={onCancel}
+                className="
+    flex-1
+    py-3
+    rounded-xl
+    border
+    border-red-500/30
+    bg-red-50
+    dark:bg-red-900/20
+    text-red-700
+    dark:text-red-400
+    font-semibold
+    flex
+    items-center
+    justify-center
+    gap-2
+    transition-all
+    duration-300
+    hover:bg-red-600
+    hover:text-white
+    hover:border-red-600
+    hover:shadow-lg
+    hover:shadow-red-500/30
+    active:scale-95
+  "
+              >
+                <XCircle size={16} />
+                Cancel Shift
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => onClaim(shift.id)}
+              className="
     flex-1
     py-3
     rounded-xl
@@ -151,17 +210,11 @@ const ShiftCard = ({ shift, onView, onClaim }) => {
     hover:shadow-lg
     hover:shadow-blue-500/30
     active:scale-95
-    disabled:opacity-50
-    disabled:cursor-not-allowed
-    disabled:hover:bg-blue-50
-    disabled:hover:text-blue-700
-    disabled:hover:border-blue-500/30
-    disabled:hover:shadow-none
-    disabled:active:scale-100
   "
-          >
-            {shift.claimed ? "Claimed" : "Claim"}
-          </button>
+            >
+              {shift.status === "Claimed" ? "Claimed" : "Claim"}
+            </button>
+          )}
 
         </div>
 

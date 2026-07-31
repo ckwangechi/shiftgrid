@@ -1,6 +1,6 @@
 import BrowseCard from "./BrowseCard";
 
-const BrowseGrid = ({ shifts = [], isLoading, error, search, filters, view, onClaim, claimingId, onView }) => {
+const BrowseGrid = ({ shifts = [], isLoading, error, search, filters, view, claimingId, onView }) => {
   if (error) {
     return (
       <div id="browse-grid" className="rounded-3xl border border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20 p-8 text-center">
@@ -49,13 +49,12 @@ const BrowseGrid = ({ shifts = [], isLoading, error, search, filters, view, onCl
   return (
     <div id="browse-grid" className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
       {shifts.map((shift) => (
-        <BrowseCard
-          key={shift.id}
-          shift={shift}
-          onView={onView}
-          onClaim={onClaim}
-          isClaiming={claimingId === shift.id}
-        />
+         <BrowseCard
+           key={shift.id}
+           shift={shift}
+           onView={onView}
+           isClaiming={claimingId === shift.id}
+         />
       ))}
     </div>
   );

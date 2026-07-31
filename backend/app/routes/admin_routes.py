@@ -199,6 +199,8 @@ def update_user(user_id):
 
     data = request.get_json(silent=True) or {}
     if "role" in data:
+        if data["role"] not in ("volunteer", "job_creator", "admin"):
+            return fail("invalid role", 400)
         user.role = data["role"]
 
     db.session.commit()

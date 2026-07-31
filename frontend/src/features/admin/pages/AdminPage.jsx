@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useAdminShifts, useCreateShift, useUpdateShift, useDeleteShift } from "../hooks/useAdmin";
 import { useAdminLocations, useCreateLocation, useDeleteLocation } from "../hooks/useAdmin";
-import { useAdminUsers } from "../hooks/useAdmin";
+import { useAdminUsers, useUpdateUser } from "../hooks/useAdmin";
 import { useSkills } from "../../skills/hooks/useSkills";
 import { useUser } from "../../../shared/contexts/UserContext";
 
@@ -24,7 +24,7 @@ const AdminPage = () => {
     required_skill: "",
     start_time: "",
     end_time: "",
-    location_id: "",
+    location: "",
     title: "",
     company: "",
     pay: "",
@@ -44,6 +44,7 @@ const AdminPage = () => {
   const { mutate: deleteLocation } = useDeleteLocation();
 
   const { data: usersData, isLoading: usersLoading } = useAdminUsers();
+  const { mutate: updateUser } = useUpdateUser();
 
   const shifts = shiftsData?.data ?? [];
   const locations = locationsData?.data ?? [];
@@ -121,16 +122,14 @@ const AdminPage = () => {
                   onChange={(e) => setShiftForm((prev) => ({ ...prev, pay: e.target.value }))}
                   className="h-12 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <select
-                  value={shiftForm.location_id}
-                  onChange={(e) => setShiftForm((prev) => ({ ...prev, location_id: e.target.value }))}
-                  className="h-12 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select Location</option>
-                  {(locationsData?.data ?? []).map((loc) => (
-                    <option key={loc.id} value={loc.id}>{loc.name}</option>
-                  ))}
-                </select>
+                 <input
+                   type="text"
+                   placeholder="Location"
+                   value={shiftForm.location}
+                   onChange={(e) => setShiftForm((prev) => ({ ...prev, location: e.target.value }))}
+                   list="admin-locations"
+                   className="h-12 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 outline-none focus:ring-2 focus:ring-blue-500"
+                 />
                 <input
                   type="datetime-local"
                   value={shiftForm.start_time}
@@ -154,7 +153,6 @@ const AdminPage = () => {
                   onClick={() => {
                     createShift({
                       ...shiftForm,
-                      location_id: Number(shiftForm.location_id),
                       pay: shiftForm.pay ? Number(shiftForm.pay) : undefined,
                       start_time: new Date(shiftForm.start_time).toISOString(),
                       end_time: new Date(shiftForm.end_time).toISOString(),
@@ -164,7 +162,7 @@ const AdminPage = () => {
                       required_skill: "",
                       start_time: "",
                       end_time: "",
-                      location_id: "",
+                      location: "",
                       title: "",
                       company: "",
                       pay: "",
@@ -178,11 +176,17 @@ const AdminPage = () => {
               </div>
             </div>
 
-            <datalist id="admin-skills">
-              {adminSkills.map((skill) => (
-                <option key={skill} value={skill} />
-              ))}
-            </datalist>
+             <datalist id="admin-locations">
+               {(locationsData?.data ?? []).map((loc) => (
+                 <option key={loc.id} value={loc.name} />
+               ))}
+             </datalist>
+
+             <datalist id="admin-skills">
+               {adminSkills.map((skill) => (
+                 <option key={skill} value={skill} />
+               ))}
+             </datalist>
 
             <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
               <div className="p-6 border-b border-slate-200 dark:border-slate-800">

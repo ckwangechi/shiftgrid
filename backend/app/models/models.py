@@ -47,7 +47,8 @@ class User(db.Model):
     preferences = relationship(
         "UserPreference",
         uselist=False,
-        back_populates="user"
+        back_populates="user",
+        cascade="all, delete-orphan",
     )
 
     password_resets = relationship(

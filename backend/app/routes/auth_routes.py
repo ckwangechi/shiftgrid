@@ -30,7 +30,7 @@ def register():
         full_name=data.get("full_name", username),
         email=email,
         password_hash=bcrypt.generate_password_hash(password).decode("utf-8"),
-        role="admin" if email.lower().endswith("@gmail.admin.com") else "volunteer",
+        role=data.get("role") if data.get("role") in ("volunteer", "job_creator", "admin") else "volunteer",
     )
     db.session.add(user)
     db.session.flush()

@@ -124,12 +124,28 @@ def created_shifts():
 @role_required("admin", "job_creator")
 def create_shift():
     data = request.get_json(silent=True) or {}
-    required_fields = ["role_title", "required_skill", "start_time", "end_time", "location_id"]
+    required_fields = ["role_title", "required_skill", "start_time", "end_time"]
     missing = [f for f in required_fields if not data.get(f)]
     if missing:
         return fail(f"missing fields: {', '.join(missing)}", 400)
 
-    if not EventLocation.query.get(data["location_id"]):
+    location_id = data.get("location_id")
+    location_name = data.get("location")
+
+    if not location_id and not location_name:
+        return fail("location or location_id is required", 400)
+
+    if location_name and not location_id:
+        existing_loc = EventLocation.query.filter_by(name=location_name).first()
+        if existing_loc:
+            location_id = existing_loc.id
+        else:
+            new_loc = EventLocation(name=location_name)
+            db.session.add(new_loc)
+            db.session.flush()
+            location_id = new_loc.id
+
+    if not EventLocation.query.get(location_id):
         return fail("location not found", 404)
 
     try:
@@ -149,7 +165,7 @@ def create_shift():
         required_skill=data["required_skill"],
         start_time=start_time,
         end_time=end_time,
-        location_id=data["location_id"],
+        location_id=location_id,
         title=data.get("title") or data["role_title"],
         description=data.get("description"),
         company=data.get("company"),
@@ -189,6 +205,17 @@ def update_shift(shift_id):
         if not EventLocation.query.get(data["location_id"]):
             return fail("location not found", 404)
         shift.location_id = data["location_id"]
+    if "location" in data and not data.get("location_id"):
+        loc_name = data["location"]
+        if loc_name:
+            existing_loc = EventLocation.query.filter_by(name=loc_name).first()
+            if existing_loc:
+                shift.location_id = existing_loc.id
+            else:
+                new_loc = EventLocation(name=loc_name)
+                db.session.add(new_loc)
+                db.session.flush()
+                shift.location_id = new_loc.id
 
     try:
         if "start_time" in data:
@@ -253,3 +280,21 @@ def claim_shift(shift_id):
     db.session.commit()
 
     return ok({"message": "shift claimed", "shift": _shift_to_dict(shift)})
+
+
+@shift_bp.route("/<int:shift_id>/release", methods=["POST"])
+@jwt_required()
+def release_shift(shift_id):
+    user_id = int(get_jwt_identity())
+    shift = Shift.query.get(shift_id)
+    if not shift:
+        return fail("shift not found", 404)
+
+    if shift.user_id != user_id:
+        return fail("you have not claimed this shift", 403)
+
+    shift.user_id = None
+    shift.status = "Open"
+    db.session.commit()
+
+    return ok({"message": "shift released", "shift": _shift_to_dict(shift)})

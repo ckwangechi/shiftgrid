@@ -73,9 +73,8 @@ const BrowseShiftsPage = () => {
               search={search}
               filters={filters}
               view={view}
-              onView={(shift) => setSelectedShift(shift)}
-              onClaim={(shiftId) => claimMutation.mutate(shiftId)}
-              claimingId={claimMutation.isPending ? claimMutation.variables : null}
+            onView={(shift) => setSelectedShift(shift)}
+            claimingId={claimMutation.isPending ? claimMutation.variables : null}
             />
           </main>
         </div>
@@ -84,6 +83,11 @@ const BrowseShiftsPage = () => {
           shift={selectedShift}
           isOpen={!!selectedShift}
           onClose={() => setSelectedShift(null)}
+          onClaim={() => {
+            if (selectedShift) {
+              claimMutation.mutate(selectedShift.id);
+            }
+          }}
         />
       </div>
     </DashboardLayout>
